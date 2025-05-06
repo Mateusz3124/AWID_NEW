@@ -1,0 +1,9 @@
+name = "differential"
+uuid = "6b7126c9-2a38-47c8-b9ed-81fd99ba873a"
+version = "0.0.1"
+
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
+[compat]
+LinearAlgebra = "1.11.0"
