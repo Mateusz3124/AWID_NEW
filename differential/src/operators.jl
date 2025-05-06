@@ -18,7 +18,7 @@ backward(node::BroadcastedOperator{typeof(*)}, x, y, g) =
         tuple(Jx' * g, Jy' * g)
     end
 
-Base.Broadcast.broadcasted(/, x::GraphNode, y::GraphNode) = BroadcastedOperator(/, x, y)
+Base.Broadcast.broadcasted(::Val{/}, x::GraphNode, y::GraphNode) = BroadcastedOperator(/, x, y)
 forward(::BroadcastedOperator{typeof(/)}, x, y) = return x ./ y
 backward(node::BroadcastedOperator{typeof(/)}, x, y, g) =
     let
