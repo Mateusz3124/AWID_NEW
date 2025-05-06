@@ -4,7 +4,7 @@ function dense(w, x, activation)
     return activation(w * x)
 end
 
-function binarycrossentropy(y::Variable, ŷ::Operator)
+function binarycrossentropy(y, ŷ::Operator)
     sizeConst = Constant(Float32(length(y.output)))
     ϵ = Constant(Float32(1e-8))
     zero = Constant(Float32(0.0))
@@ -12,7 +12,7 @@ function binarycrossentropy(y::Variable, ŷ::Operator)
     return sum((zero .- (y .* log.(ŷ .+ ϵ))) .- (one .- y) .* (log.(one .- ŷ .+ ϵ))) ./ sizeConst
 end
 
-function graphBuild(x::Variable, y::Variable, Wh::Variable, Wo::Variable)
+function graphBuild(x, y, Wh::Variable, Wo::Variable)
     x̂ = dense(Wh, x, relu)
     ŷ = dense(Wo, x̂, σ)
     E = binarycrossentropy(y, ŷ)

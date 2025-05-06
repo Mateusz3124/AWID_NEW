@@ -31,7 +31,7 @@ function startNetwork(X_train::Matrix{Float32}, y_train::Vector{Float32}, X_test
     xTest = Variable(X_test)
     yTest = Variable(y_test)
 
-    (graph, ŷ) = graphBuild(x, y, Wh, Wo)
+    # (graph, ŷ) = graphBuild(x, y, Wh, Wo)
     (graphTest, ŷTest) = graphBuild(xTest, yTest, Wh, Wo)
 
     optimizer = Adam(Wh.output)
@@ -39,20 +39,21 @@ function startNetwork(X_train::Matrix{Float32}, y_train::Vector{Float32}, X_test
 
     epochs = 5
 
+    graphs = []
+
+    for (x,y) in (data)
+        (graph, ~) = graphBuild(Constant(x), Constant(y), Wh, Wo)
+        push!(graphs, graph)
+    end
+
     for epoch in 1:epochs
         total_loss = Float32(0.0)
         total_acc = Float32(0.0)
 
         t = @elapsed begin
-            for (x_curr, y_curr) in data
-                x.output = x_curr
-                y.output = y_curr
+            for graph in graphs
 
                 forward!(graph)
-
-                total_loss += graph[end].output
-                total_acc += accuracy(ŷ.output, y_curr)
-
                 backward!(graph)
 
                 apply!(optimizer, Wh.output, Wh.gradient, epoch)
